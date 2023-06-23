@@ -20,9 +20,11 @@
 # Released under the MIT License. See LICENSE for more information
 #
 class ipaclient::automount(
-    $server   = $ipaclient::params::automount_server,
-    $location = $ipaclient::params::automount_location
-) inherits ipaclient::params {
+  $server   = $ipaclient::params::automount_server,
+  $location = $ipaclient::params::automount_location
+)
+{
+  include ::ipaclient::params
 
   if !empty($server) {
     $opt_server = ['--server',$server]
@@ -37,7 +39,7 @@ class ipaclient::automount(
   }
 
   $command = shellquote(delete(flatten(['/usr/sbin/ipa-client-automount',
-                        $opt_server,$opt_location,'--unattended']), ''))
+  $opt_server,$opt_location,'--unattended']), ''))
 
   exec { 'enable_automount':
     command => $command,

@@ -116,10 +116,12 @@ class ipaclient (
   $sudo               = $ipaclient::params::sudo,
   $hostname           = $ipaclient::params::hostname,
   $force_join         = $ipaclient::params::force_join
-) inherits ipaclient::params {
+)
+{
+  include ::ipaclient::params
 
   package { $package:
-    ensure => installed,
+    ensure          => installed,
     install_options => $package_options,
   }
 
@@ -201,8 +203,8 @@ class ipaclient (
       }
 
       if !empty($::ipa_client_version) and
-         versioncmp($::ipa_client_version, "4.9.10") >= 0 and
-         str2bool($subid) {
+      versioncmp($::ipa_client_version, '4.9.10') >= 0 and
+      str2bool($subid) {
         $opt_subid = '--subid'
       } else {
         $opt_subid = ''
@@ -213,7 +215,7 @@ class ipaclient (
       } else {
         $opt_sudo = ''
       }
-      
+
       if str2bool($force_join) {
         $opt_force_join = '--force-join'
       } else {
@@ -222,10 +224,10 @@ class ipaclient (
 
       # Flatten the arrays, delete empty options, and shellquote everything
       $command = shellquote(delete(flatten([$installer,$opt_realm,$opt_password,
-                            $opt_principal,$opt_mkhomedir,$opt_domain,$opt_hostname,
-                            $opt_server,$opt_fixed_primary,$opt_ssh,$opt_sshd,$opt_ntp,
-                            $opt_sudo,$opt_subid,$opt_force,$opt_force_join,$options,
-                            '--unattended']), ''))
+      $opt_principal,$opt_mkhomedir,$opt_domain,$opt_hostname,
+      $opt_server,$opt_fixed_primary,$opt_ssh,$opt_sshd,$opt_ntp,
+      $opt_sudo,$opt_subid,$opt_force,$opt_force_join,$options,
+      '--unattended']), ''))
 
       # Make sure we can collect the `ipa_client_version` fact first
       # Makes us run twice, though :(
@@ -233,18 +235,19 @@ class ipaclient (
         exec { 'ipa_installer':
           command => $command,
           unless  => "/usr/sbin/ipa-client-install -U 2>&1 \
-            | /bin/grep -q 'already configured'",
+          | /bin/grep -q 'already configured'",
           require => Package[$package],
         }
       }
 
-      $installer_resource = Exec['ipa_installer']
+      #$installer_resource = Exec['ipa_installer']
 
       # Include debian fixes since the installer doesn't properly
       # configure ssh and mkhomedir
       if ($::osfamily == 'Debian') {
         class { 'ipaclient::debian_fixes':
-          require => $installer_resource,
+          #require => $installer_resource,
+          require => Exec['ipa_installer']
         }
       }
     }
@@ -271,15 +274,17 @@ class ipaclient (
     class { 'ipaclient::sudoers':
       server  => $sudo_server,
       domain  => $sudo_domain,
-      require => $installer_resource,
+      require => Exec['ipa_installer']
+      #require => $installer_resource,
     }
   }
 
   if str2bool($automount) {
     class { 'ipaclient::automount':
-        location => $automount_location,
-        server   => $automount_server,
-        require  => $installer_resource,
+      location => $automount_location,
+      server   => $automount_server,
+      #require  => $installer_resource,
+      require  => Exec['ipa_installer']
     }
   }
 }

@@ -28,7 +28,9 @@ class ipaclient::sudoers (
   $server = $::ipa_server,
   $domain = $::ipa_domain,
   $automount = $ipaclient::params::automount,
-) inherits ipaclient::params {
+)
+{
+  include ::ipaclient::params
 
   if !empty($server) and !empty($domain) {
     $realm = upcase($domain)
