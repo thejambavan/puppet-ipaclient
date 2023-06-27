@@ -92,7 +92,7 @@
 # Copyright 2014 Stephen Benjamin.
 # Released under the MIT License. See LICENSE for more information
 #
-class ipaclient inherits ipaclient::params (
+class ipaclient (
   
   $automount          = $ipaclient::params::automount,
   $automount_location = $ipaclient::params::automount_location,
@@ -117,8 +117,7 @@ class ipaclient inherits ipaclient::params (
   $sudo               = $ipaclient::params::sudo,
   $hostname           = $ipaclient::params::hostname,
   $force_join         = $ipaclient::params::force_join
-)
-{
+) inherits ipaclient::params {
 
   package { $package:
     ensure          => installed,
