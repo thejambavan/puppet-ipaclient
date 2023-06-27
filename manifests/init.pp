@@ -118,7 +118,7 @@ class ipaclient (
   $force_join         = $ipaclient::params::force_join
 )
 {
-  include ::ipaclient::params
+  require ipaclient::params
 
   package { $package:
     ensure          => installed,
