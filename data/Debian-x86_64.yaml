@@ -1,0 +1,2 @@
+---
+ipaclient::install::package: freeipa-client

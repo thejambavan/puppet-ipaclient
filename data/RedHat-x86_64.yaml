@@ -1,0 +1,2 @@
+---
+ipaclient::install::package: ipa-client
