@@ -93,7 +93,7 @@
 # Released under the MIT License. See LICENSE for more information
 #
 class ipaclient (
-  
+
   $automount          = $ipaclient::params::automount,
   $automount_location = $ipaclient::params::automount_location,
   $automount_server   = $ipaclient::params::automount_server,
@@ -118,11 +118,8 @@ class ipaclient (
   $hostname           = $ipaclient::params::hostname,
   $force_join         = $ipaclient::params::force_join
 ) inherits ipaclient::params {
-
-  package { $package:
-    ensure          => installed,
-    install_options => $package_options,
-  }
+  # install before doing stuff
+  require ipaclient::install
 
   if !str2bool($::ipa_enrolled) {
     if empty($password) {
@@ -230,13 +227,13 @@ class ipaclient (
 
       # Make sure we can collect the `ipa_client_version` fact first
       # Makes us run twice, though :(
-      if !empty($::ipa_client_version) {
-        exec { 'ipa_installer':
-          command => $command,
-          unless  => "if [ -e /usr/sbin/ipa-client-install ] ; then /usr/sbin/ipa-client-install -U 2>&1 | /bin/grep -q 'already configured'; else /bin/false; fi",
-          require => Package[$package],
-        }
-      }
+      #if !empty($::ipa_client_version) {
+      #  exec { 'ipa_installer':
+      #    command => $command,
+      #    unless  => "if [ -e /usr/sbin/ipa-client-install ] ; then /usr/sbin/ipa-client-install -U 2>&1 | /bin/grep -q 'already configured'; else /bin/false; fi",
+      #    require => Package[$package],
+      #  }
+      #}
 
       #$installer_resource = Exec['ipa_installer']
 
@@ -244,8 +241,7 @@ class ipaclient (
       # configure ssh and mkhomedir
       if ($::osfamily == 'Debian') {
         class { 'ipaclient::debian_fixes':
-          #require => $installer_resource,
-          require => Exec['ipa_installer']
+          require  => Class['ipaclient::install']
         }
       }
     }
@@ -272,8 +268,7 @@ class ipaclient (
     class { 'ipaclient::sudoers':
       server  => $sudo_server,
       domain  => $sudo_domain,
-      require => Exec['ipa_installer']
-      #require => $installer_resource,
+      require => Class['ipaclient::install']
     }
   }
 
@@ -281,8 +276,7 @@ class ipaclient (
     class { 'ipaclient::automount':
       location => $automount_location,
       server   => $automount_server,
-      #require  => $installer_resource,
-      require  => Exec['ipa_installer']
+      require  => Class['ipaclient::install']
     }
   }
 }
