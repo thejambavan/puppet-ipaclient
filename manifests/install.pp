@@ -3,10 +3,10 @@
 # Install ipaclient
 #
 class ipaclient::install(
-  $package = undef # from hiera instead of old-school case() stupidity
+  String $package = undef, # from hiera instead of old-school case() stupidity
 ){
   package { $package:
-    ensure          => installed,
+    ensure          => installed
   }
 
 }

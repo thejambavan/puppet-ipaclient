@@ -12,7 +12,7 @@ hierarchy:
   - name: 'Operating System Family Major Version'
     path: '%{facts.os.family}-family-%{facts.os.release.major}.yaml'
 
-  - name: 'Architectur of Operating System Family'
+  - name: 'Architecture and Operating System Family'
     path: '%{facts.os.family}-%{facts.os.architecture}-family.yaml'
 
   - name: 'Operating System Family'
