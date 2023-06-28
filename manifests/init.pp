@@ -227,13 +227,13 @@ class ipaclient (
 
       # Make sure we can collect the `ipa_client_version` fact first
       # Makes us run twice, though :(
-      #if !empty($::ipa_client_version) {
-      #  exec { 'ipa_installer':
-      #    command => $command,
+      if !empty($::ipa_client_version) {
+        exec { 'ipa_installer':
+          command => $command,
       #    unless  => "if [ -e /usr/sbin/ipa-client-install ] ; then /usr/sbin/ipa-client-install -U 2>&1 | /bin/grep -q 'already configured'; else /bin/false; fi",
-      #    require => Package[$package],
-      #  }
-      #}
+          require => Class['ipaclient::install']
+        }
+      }
 
       #$installer_resource = Exec['ipa_installer']
 
