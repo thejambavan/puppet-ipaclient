@@ -1,1 +1,4 @@
 ---
+# single key to stop bolt complaining
+ipaclient::automount: false
+...
