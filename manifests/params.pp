@@ -40,15 +40,15 @@ class ipaclient::params {
     'RedHat': {
       case $facts['os']['name'] {
         'Fedora': {
-          if (versioncmp($facts['os']['release'], '21') >= 0) {
+          if (versioncmp($facts['os']['release']['full'], '21') >= 0) {
             $needs_sudo_config = false
           } else {
             $needs_sudo_config = true
           }
         }
         default: {
-          if (versioncmp($facts['os']['release'], '6.6') >= 0) {
-            if (versioncmp($facts['os']['release'], '7.0') == 0) {
+          if (versioncmp($facts['os']['release']['full'], '6.6') >= 0) {
+            if (versioncmp($facts['os']['release']['full'], '7.0') == 0) {
               $needs_sudo_config = true
             } else {
               $needs_sudo_config = false
@@ -62,7 +62,7 @@ class ipaclient::params {
     'Debian': {
       case $facts['os']['name'] {
         'Ubuntu': {
-          if (versioncmp($facts['os']['release'], '15.04') > 0) {
+          if (versioncmp($facts['os']['release']['full'], '15.04') > 0) {
             $needs_sudo_config = false
           } else {
             $needs_sudo_config = true

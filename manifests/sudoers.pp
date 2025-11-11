@@ -39,10 +39,10 @@ class ipaclient::sudoers (
       'RedHat': {
 
         if ($facts['os']['name'] == 'Fedora' and
-          versioncmp($facts['os']['release'], '20') >= 0) {
+          versioncmp($facts['os']['release']['full'], '20') >= 0) {
             $libsss_sudo_package = []
         } elsif ($facts['os']['name'] != 'Fedora' and
-            versioncmp($facts['os']['release'], '6.6') >= 0) {
+            versioncmp($facts['os']['release']['full'], '6.6') >= 0) {
             $libsss_sudo_package = []
         } else {
             $libsss_sudo_package = 'libsss_sudo'
@@ -100,17 +100,17 @@ class ipaclient::sudoers (
     if empty($::sssd_version) {
       case $facts['os']['family'] {
         'RedHat': {
-          if (versioncmp($facts['os']['release'], '6.6') >= 0) {
+          if (versioncmp($facts['os']['release']['full'], '6.6') >= 0) {
             $ipa_provider = 'ipa'
           } else {
             $ipa_provider = 'ldap'
           }
         }
         'Debian': {
-          if (versioncmp($facts['os']['release'], '14.04') >= 0 and
+          if (versioncmp($facts['os']['release']['full'], '14.04') >= 0 and
             $facts['os']['name'] == 'Ubuntu') {
             $ipa_provider = 'ipa'
-          } elsif (versioncmp($facts['os']['release'], '7.0') >= 0 and
+          } elsif (versioncmp($facts['os']['release']['full'], '7.0') >= 0 and
             ($facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Raspbian')) {
             $ipa_provider = 'ipa'
           } else {
