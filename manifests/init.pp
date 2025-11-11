@@ -239,7 +239,7 @@ class ipaclient (
 
       # Include debian fixes since the installer doesn't properly
       # configure ssh and mkhomedir
-      if ($::osfamily == 'Debian') {
+      if ($facts['os']['family'] == 'Debian') {
         class { 'ipaclient::debian_fixes':
           require  => Class['ipaclient::install']
         }
