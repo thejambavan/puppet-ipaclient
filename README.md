@@ -4,7 +4,7 @@
 IPAclient
 =========
 
-This module configures clients to use FreeIPA with as little fuss as possible.  This module used to be known as stbenjam/puppet-ipaclient, but is now being maintained at joshuabaird/puppet-ipaclient.
+This module configures clients to use FreeIPA with as little fuss as possible.  This module used to be known as stbenjam/puppet-ipaclient, was being maintained at joshuabaird/puppet-ipaclient. I am currently maintaining this fork for newer Puppet (>=7) versions.
 
 Thanks to all the [contributors](https://github.com/stbenjam/puppet-ipaclient/graphs/contributors)!
 
@@ -12,6 +12,7 @@ What's New
 ----------
 
   * FreeIPA 4 Support
+  * Puppet 8 Support
 
 Contributing
 ------------
@@ -24,6 +25,7 @@ Supported Platforms
   * Enterprise Linux 6, 7 (RHEL, CentOS, etc)
   * Fedora 20 or newer
   * Ubuntu 14.04 or newer
+  * Debian
 
 Basically, any Red Hat or Debian derivative with packages.
 
@@ -69,6 +71,7 @@ Automounter only:
 
 MIT License
 -----------
+Copyright (c) 2025 Seth Tunstall
 Copyright (c) 2015 Stephen Benjamin & Josh Baird
 
 Permission is hereby granted, free of charge, to any person obtaining 
